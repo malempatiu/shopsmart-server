@@ -1,0 +1,22 @@
+{
+  "compilerOptions": {
+    "target": "es2016",                                  
+    "lib": ["ESNext"],                                
+    "module": "commonjs",                                
+    "resolveJsonModule": true,
+    "rootDir": "src",                                                               
+    "outDir": "build",                                     
+    "noImplicitAny": true,
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
+    "strict": true,                                      
+    "skipLibCheck": true,
+    "baseUrl": "./src",
+    "paths": {
+      "@repos/*": ["db/repos/*"],
+      "@dtos/*": ["db/dtos/*"],
+    }                                 
+  },
+  "include": ["src/**/*"],
+  "exclude": ["node_modules", "**/*.spec.ts"]
+}
