@@ -12,5 +12,5 @@ CMD ["npm", "run", "start:dev"]
 
 FROM base as prod
 WORKDIR /usr/app
-COPY . .
+COPY ./build .
 CMD ["npm", "run", "start:prod"]
