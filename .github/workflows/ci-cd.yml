@@ -1,0 +1,27 @@
+name: CI-CD
+on:
+  pull_request:
+    branches:
+      - develop
+  push:
+    branches:
+      - develop
+jobs:
+  ci-build:
+    runs-on: ubuntu-latest
+    steps:
+      # checkout in to the current repo to pull the code
+      - uses: actions/checkout@v3  
+      # Specifying a certain node version
+      - name: NodeJS Setup
+        uses: actions/setup-node@v3
+        with:
+          node-version: '16.14.0'
+      # Install dependencies
+      - run: npm ci
+      # Check code formatting
+      - run: npm run lint:check
+      # Run automated tests
+      - run: npm run test -- --coverage
+        env:
+          CI: true

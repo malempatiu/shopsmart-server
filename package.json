@@ -10,6 +10,8 @@
     "start:prod": "node ./app/index.js",
     "migrate:db": "npm run build && npx sequelize-cli db:migrate",
     "migrate:undo": "npx sequelize-cli db:migrate:undo",
+    "lint:check": "eslint src --ext .ts,.js",
+    "lint:fix": "eslint --fix src --ext .ts,.js",
     "test": "jest"
   },
   "keywords": [],
