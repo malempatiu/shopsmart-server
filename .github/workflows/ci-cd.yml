@@ -1,0 +1,48 @@
+name: CI-CD
+on:
+  pull_request:
+    branches:
+      - develop
+  push:
+    branches:
+      - develop
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      # checkout in to the current repo to pull the code
+      - uses: actions/checkout@v3  
+      # Specifying a certain node version
+      - name: NodeJS Setup
+        uses: actions/setup-node@v3
+        with:
+          node-version: '16.14.0'
+      # Install dependencies
+      - run: npm ci
+      # Check code formatting
+      - run: npm run lint:check
+      # Run automated tests
+      - run: npm run test -- --coverage
+        env:
+          CI: true
+  publish:
+    needs: test
+    if: github.event_name == 'push'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: NodeJS Setup
+        uses: actions/setup-node@v3
+        with:
+          node-version: '16.14.0'
+      - name: Build Folder for Publish
+        run: npm run build
+      - name: Build the Docker Image
+        run: docker build -t ugeshmalempati5/shopsmart-staging --target prod .
+      - name: Login to Docker
+        run: docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
+        env:
+          DOCKER_USERNAME: ${{ secrets.DOCKER_UN }}
+          DOCKER_PASSWORD: ${{ secrets.DOCKER_PASS }}
+      - name: Publish the image to Docker Hub
+        run: docker push ugeshmalempati5/shopsmart-staging
