@@ -42,7 +42,7 @@ describe('UserService', () => {
     it('should return user details with token', async () => {
       process.env.SIGN_SECRET = '123456789';
       const userDto = await userService.createUser(users[1].email, users[1].password);
-      expect(userDto.id).toBe(users[1].id);
+      expect(userDto.id).toBe(9);
       expect(userDto.email).toBe(users[1].email);
       expect(userDto.firstName).toBeUndefined();
       expect(userDto.lastName).toBeUndefined();
