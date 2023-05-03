@@ -12,6 +12,16 @@ jobs:
     steps:
       # checkout in to the current repo to pull the code
       - uses: actions/checkout@v3  
+      # Cache the dependencies
+      - name: Cache Node Dependencies
+        uses: actions/cache@v3
+        with:
+          path: ~/.npm
+          # will be used to retrieve the cache
+          # if either os or any dependency changes then a new cache will be generated with new key 
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node- 
       # Specifying a certain node version
       - name: NodeJS Setup
         uses: actions/setup-node@v3
@@ -25,12 +35,35 @@ jobs:
       - run: npm run test -- --coverage
         env:
           CI: true
+      # Upload code coverage to artifacts
+      - name: Upload Test coverage
+        if: github.event_name == 'push' && github.ref == 'refs/head/develop'
+        uses: actions/upload-artifact@v3
+        with:
+          name: code-coverage
+          path: coverage
+      # Upload code coverage to codecov
+      - name: Upload coverage reports
+        if: github.event_name == 'push' && github.ref == 'refs/head/develop'
+        run: npx codecov
+        env:
+          CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
   publish:
     needs: test
-    if: github.event_name == 'push'
+    if: github.event_name == 'push' && github.ref == 'refs/head/develop'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
+      # Cache the dependencies
+      - name: Cache Node Dependencies
+        uses: actions/cache@v3
+        with:
+          path: ~/.npm
+          # will be used to retrieve the cache
+          # if either os or any dependency changes then a new cache will be generated with new key 
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node- 
       - name: NodeJS Setup
         uses: actions/setup-node@v3
         with:
