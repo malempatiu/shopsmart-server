@@ -37,20 +37,20 @@ jobs:
           CI: true
       # Upload code coverage to artifacts
       - name: Upload Test coverage
-        if: github.event_name == 'push' && github.ref == 'refs/head/develop'
+        if: github.event_name == 'push' && github.ref == 'refs/heads/develop'
         uses: actions/upload-artifact@v3
         with:
           name: code-coverage
           path: coverage
       # Upload code coverage to codecov
       - name: Upload coverage reports
-        if: github.event_name == 'push' && github.ref == 'refs/head/develop'
+        if: github.event_name == 'push' && github.ref == 'refs/heads/develop'
         run: npx codecov
         env:
           CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
   publish:
     needs: test
-    if: github.event_name == 'push' && github.ref == 'refs/head/develop'
+    if: github.event_name == 'push' && github.ref == 'refs/heads/develop'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
