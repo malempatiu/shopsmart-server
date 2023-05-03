@@ -35,6 +35,7 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: '16.14.0'
+      - run: npm install
       - name: Build Folder for Publish
         run: npm run build
       - name: Build the Docker Image
