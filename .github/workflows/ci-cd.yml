@@ -27,7 +27,22 @@ jobs:
           CI: true
   publish:
     needs: test
+    if: github.event_name == 'push'
     runs-on: ubuntu-latest
     steps:
-      - name: Publish
-        run: echo "I'm gonna publish after test job"
+      - uses: actions/checkout@v2
+      - name: NodeJS Setup
+        uses: actions/setup-node@v3
+        with:
+          node-version: '16.14.0'
+      - name: Build Folder for Publish
+        run: npm run build
+      - name: Build the Docker Image
+        run: docker build -t ugeshmalempati5/shopsmart-staging --target prod .
+      - name: Login to Docker
+        run: docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
+        env:
+          DOCKER_USERNAME: ${{ secrets.DOCKER_UN }}
+          DOCKER_PASSWORD: ${{ secrets.DOCKER_PASS }}
+      - name: Publish the image to Docker Hub
+        run: docker push ugeshmalempati5/shopsmart-staging
