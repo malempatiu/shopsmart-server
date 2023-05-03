@@ -7,7 +7,7 @@ on:
     branches:
       - develop
 jobs:
-  ci-build:
+  test:
     runs-on: ubuntu-latest
     steps:
       # checkout in to the current repo to pull the code
@@ -25,3 +25,9 @@ jobs:
       - run: npm run test -- --coverage
         env:
           CI: true
+  publish:
+    needs: test
+    runs-on: ubuntu-latest
+    steps:
+      - name: Publish
+        run: echo "I'm gonna publish after test job"
