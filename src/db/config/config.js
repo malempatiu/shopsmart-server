@@ -8,5 +8,5 @@ module.exports = {
     host: process.env.MYSQL_HOST,
     dialect: 'mysql',
     port: process.env.MYSQL_PORT,
-  },
+  }
 };

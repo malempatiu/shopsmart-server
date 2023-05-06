@@ -79,4 +79,15 @@ jobs:
           DOCKER_USERNAME: ${{ secrets.DOCKER_UN }}
           DOCKER_PASSWORD: ${{ secrets.DOCKER_PASS }}
       - name: Publish the image to Docker Hub
+        id: image_publish
         run: docker push ugeshmalempati5/shopsmart-staging
+      - name: Run migrations
+        if: steps.image_publish.outcome == 'success'
+        env:
+          NODE_ENV: development
+          MYSQL_HOST: ${{ secrets.MYSQL_HOST }}
+          MYSQL_PORT: ${{ secrets.MYSQL_PORT }}
+          MYSQL_DB: ${{ secrets.MYSQL_DB }}
+          MYSQL_USER: ${{ secrets.MYSQL_USER }}
+          MYSQL_PASSWORD: ${{ secrets.MYSQL_PASSWORD }}
+        run: npx sequelize-cli db:migrate --env development
