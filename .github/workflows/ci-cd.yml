@@ -93,7 +93,7 @@ jobs:
           MYSQL_PASSWORD: ${{ secrets.MYSQL_PASSWORD }}
         run: npx sequelize-cli db:migrate --env development
       - name: Deploy to EBS
-        if: steps.image_publish.outcome == 'success'
+        if: steps.migrations.outcome == 'success'
         run: |
           eb init -r eu-central-1 -p Docker shopsmart-dev-server
           eb use Shopsmart-dev-server-env
