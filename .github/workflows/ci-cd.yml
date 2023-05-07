@@ -68,6 +68,10 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: '16.14.0'
+      - name: Install EB CLI
+        run: |
+          sudo apt-get update && sudo apt-get install -y python3-pip
+          pip3 install awsebcli --upgrade
       - run: npm install
       - name: Build Folder for Publish
         run: npm run build
