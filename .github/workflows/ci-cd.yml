@@ -72,7 +72,7 @@ jobs:
       - name: Build Folder for Publish
         run: npm run build
       - name: Build the Docker Image
-        run: docker build -t ugeshmalempati5/shopsmart-staging --target prod .
+        run: docker build -t ugeshmalempati5/shopsmart-staging:latest --target prod .
       - name: Login to Docker
         run: docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
         env:
@@ -82,6 +82,7 @@ jobs:
         id: image_publish
         run: docker push ugeshmalempati5/shopsmart-staging
       - name: Run migrations
+        id: migrations
         if: steps.image_publish.outcome == 'success'
         env:
           NODE_ENV: development
@@ -91,3 +92,12 @@ jobs:
           MYSQL_USER: ${{ secrets.MYSQL_USER }}
           MYSQL_PASSWORD: ${{ secrets.MYSQL_PASSWORD }}
         run: npx sequelize-cli db:migrate --env development
+      - name: Deploy to EBS
+        if: steps.migrations.outcome == 'success'
+        run: |
+          eb init -r eu-central-1 -p Docker shopsmart-dev-server
+          eb use Shopsmart-dev-server-env
+          eb deploy
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}

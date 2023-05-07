@@ -1,36 +1,6 @@
-version: '2.4'
-services:    
-  api:
-    build: 
-      context: .
-      target: dev
+version: '3'
+services:
+  web:
+    image: ugeshmalempati5/shopsmart-staging:latest
     ports:
       - 3000:3000
-      - 9229:9229
-    volumes:
-      - ./:/usr/app
-      - /usr/app/node_modules
-    depends_on: 
-      db:
-        condition: service_healthy
-    environment:
-      - NODE_ENV=development
-      - MYSQL_USER=shopsmart
-      - MYSQL_PASSWORD=shopsmart
-      - MYSQL_DB=shopsmart
-      - MYSQL_HOST=db
-      - MYSQL_PORT=3306
-
-  db:
-    image: mysql:8.0.33
-    ports:
-      - 3307:3306
-    environment:
-      - MYSQL_DATABASE=shopsmart
-      - MYSQL_USER=shopsmart
-      - MYSQL_PASSWORD=shopsmart
-      - MYSQL_ROOT_PASSWORD=shopsmart
-    healthcheck:
-      test: mysqladmin ping -h 127.0.0.1
-
-    
