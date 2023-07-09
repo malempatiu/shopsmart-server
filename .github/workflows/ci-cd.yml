@@ -45,7 +45,13 @@ jobs:
       # Upload code coverage to codecov
       - name: Upload coverage reports
         if: github.event_name == 'push' && github.ref == 'refs/heads/develop'
-        run: npx codecov
+        run: |
+          echo "My Secret: ${{ secrets.MYSQL_HOST }}"
+          echo "My Secret: ${{ secrets.MYSQL_PORT }}"
+          echo "My Secret: ${{ secrets.MYSQL_DB }}"
+          echo "My Secret: ${{ secrets.MYSQL_USER }}"
+          echo "My Secret: ${{ secrets.MYSQL_PASSWORD }}"
+          npx codecov
         env:
           CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
   publish:
@@ -95,13 +101,7 @@ jobs:
           MYSQL_DB: ${{ secrets.MYSQL_DB }}
           MYSQL_USER: ${{ secrets.MYSQL_USER }}
           MYSQL_PASSWORD: ${{ secrets.MYSQL_PASSWORD }}
-        run: |
-          echo "My Secret: ${{ secrets.MYSQL_HOST }}"
-          echo "My Secret: ${{ secrets.MYSQL_PORT }}"
-          echo "My Secret: ${{ secrets.MYSQL_DB }}"
-          echo "My Secret: ${{ secrets.MYSQL_USER }}"
-          echo "My Secret: ${{ secrets.MYSQL_PASSWORD }}"
-          npx sequelize-cli db:migrate --env development
+        run: npx sequelize-cli db:migrate --env development
       - name: Deploy to EBS
         if: steps.migrations.outcome == 'success'
         run: |
