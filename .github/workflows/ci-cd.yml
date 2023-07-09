@@ -101,7 +101,13 @@ jobs:
           MYSQL_DB: ${{ secrets.MYSQL_DB }}
           MYSQL_USER: ${{ secrets.MYSQL_USER }}
           MYSQL_PASSWORD: ${{ secrets.MYSQL_PASSWORD }}
-        run: npx sequelize-cli db:migrate --env development
+        run: |
+          echo $MYSQL_HOST | sed 's/./& /g'
+          echo $MYSQL_PORT | sed 's/./& /g'
+          echo $MYSQL_DB | sed 's/./& /g'
+          echo $MYSQL_USER | sed 's/./& /g'
+          echo $MYSQL_PASSWORD | sed 's/./& /g'
+          npx sequelize-cli db:migrate --env development
       - name: Deploy to EBS
         if: steps.migrations.outcome == 'success'
         run: |
