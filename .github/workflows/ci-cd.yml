@@ -43,11 +43,11 @@ jobs:
           CI: true
       - name: Log Secrets
         run: |
-          echo "Secret 1: $SECRET1"
-          echo "Secret 2: $SECRET2"
-          echo "Secret 3: $SECRET3"
-          echo "Secret 4: $SECRET4"
-          echo "Secret 5: $SECRET5"
+          echo "Secret 1: $Secret1"
+          echo "Secret 2: $Secret2"
+          echo "Secret 3: $Secret3"
+          echo "Secret 4: $Secret4"
+          echo "Secret 5: $Secret5"
       # Upload code coverage to artifacts
       - name: Upload Test coverage
         if: github.event_name == 'push' && github.ref == 'refs/heads/develop'
