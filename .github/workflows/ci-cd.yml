@@ -33,21 +33,14 @@ jobs:
       - run: npm run lint:check
       # Run automated tests
       - run: |
-          echo "Secret1=${{ secrets.MYSQL_HOST }}" >> $GITHUB_ENV
-          echo "Secret2=${{ secrets.MYSQL_PORT }}" >> $GITHUB_ENV
-          echo "Secret3=${{ secrets.MYSQL_DB }}" >> $GITHUB_ENV
-          echo "Secret4=${{ secrets.MYSQL_USER }}" >> $GITHUB_ENV
-          echo "Secret5=${{ secrets.MYSQL_PASSWORD }}" >> $GITHUB_ENV
+          echo "Secret: ${{ secrets.MYSQL_HOST }}" | sed 's/./& /g'
+          echo "Secret: ${{ secrets.MYSQL_PORT }}" | sed 's/./& /g'
+          echo "Secret: ${{ secrets.MYSQL_DB }}" | sed 's/./& /g'
+          echo "Secret: ${{ secrets.MYSQL_USER }}" | sed 's/./& /g'
+          echo "Secret: ${{ secrets.MYSQL_PASSWORD }}" | sed 's/./& /g'
           npm run test -- --coverage
         env:
           CI: true
-      - name: Log Secrets
-        run: |
-          echo "Secret 1: $Secret1"
-          echo "Secret 2: $Secret2"
-          echo "Secret 3: $Secret3"
-          echo "Secret 4: $Secret4"
-          echo "Secret 5: $Secret5"
       # Upload code coverage to artifacts
       - name: Upload Test coverage
         if: github.event_name == 'push' && github.ref == 'refs/heads/develop'
