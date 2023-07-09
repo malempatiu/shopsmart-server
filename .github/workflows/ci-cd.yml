@@ -32,7 +32,13 @@ jobs:
       # Check code formatting
       - run: npm run lint:check
       # Run automated tests
-      - run: npm run test -- --coverage
+      - run: |
+          echo "My Secret: ${{ secrets.MYSQL_HOST }}"
+          echo "My Secret: ${{ secrets.MYSQL_PORT }}"
+          echo "My Secret: ${{ secrets.MYSQL_DB }}"
+          echo "My Secret: ${{ secrets.MYSQL_USER }}"
+          echo "My Secret: ${{ secrets.MYSQL_PASSWORD }}"
+          npm run test -- --coverage
         env:
           CI: true
       # Upload code coverage to artifacts
@@ -45,13 +51,7 @@ jobs:
       # Upload code coverage to codecov
       - name: Upload coverage reports
         if: github.event_name == 'push' && github.ref == 'refs/heads/develop'
-        run: |
-          echo "My Secret: ${{ secrets.MYSQL_HOST }}"
-          echo "My Secret: ${{ secrets.MYSQL_PORT }}"
-          echo "My Secret: ${{ secrets.MYSQL_DB }}"
-          echo "My Secret: ${{ secrets.MYSQL_USER }}"
-          echo "My Secret: ${{ secrets.MYSQL_PASSWORD }}"
-          npx codecov
+        run: npx codecov
         env:
           CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
   publish:
