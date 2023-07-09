@@ -99,8 +99,8 @@ jobs:
       - name: Deploy to EBS
         if: steps.migrations.outcome == 'success'
         run: |
-          eb init -r eu-central-1 -p Docker shopsmart-dev-server
-          eb use Shopsmart-dev-server-env
+          eb init -r eu-central-1 -p Docker shopsmart-int
+          eb use Shopsmart-int-env
           eb deploy
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
