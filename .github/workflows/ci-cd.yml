@@ -99,7 +99,7 @@ jobs:
       - name: Deploy to EBS
         if: steps.migrations.outcome == 'success'
         run: |
-          eb init -r eu-central-1 -p Docker Shopsmart-int
+          eb init -r eu-central-1 -p Docker shopsmart-int
           eb use Shopsmart-int-env
           eb deploy
         env:
